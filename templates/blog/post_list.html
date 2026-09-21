@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Blog{% endblock %}
+{% block meta_description %}News, ideas and insights from the Active team.{% endblock %}
+{% block body_class %}blog-page{% endblock %}
+
+{% block content %}
+{% include "partials/page_title.html" with title="Blog" %}
+
+<!-- Blog Posts 2 Section -->
+<section id="blog-posts-2" class="blog-posts-2 section">
+
+  <div class="container">
+
+    <div class="row gy-5">
+
+      {% for post in posts %}
+      <div class="col-lg-4 col-md-6">
+        <article>
+
+          <div class="post-img">
+            <img src="{% static post.image %}" alt="{{ post.title }}" class="img-fluid">
+          </div>
+
+          <div class="meta-top">
+            <ul>
+              <li class="d-flex align-items-center"><a href="{{ post.get_absolute_url }}">{{ post.category }}</a></li>
+              <li class="d-flex align-items-center"><i class="bi bi-dot"></i> <a href="{{ post.get_absolute_url }}"><time datetime="{{ post.published|date:'Y-m-d' }}">{{ post.published|date:"M j, Y" }}</time></a></li>
+            </ul>
+          </div>
+
+          <h2 class="title">
+            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+          </h2>
+
+        </article>
+      </div><!-- End post list item -->
+      {% endfor %}
+
+    </div><!-- End blog posts list -->
+
+  </div>
+
+</section><!-- /Blog Posts 2 Section -->
+
+{% if is_paginated %}
+<!-- Blog Pagination Section -->
+<section id="blog-pagination" class="blog-pagination section">
+
+  <div class="container">
+    <div class="d-flex justify-content-center">
+      <ul>
+        {% if page_obj.has_previous %}
+        <li><a href="?page={{ page_obj.previous_page_number }}" aria-label="Previous page"><i class="bi bi-chevron-left"></i></a></li>
+        {% endif %}
+        {% for number in page_range %}
+          {% if number == page_obj.paginator.ELLIPSIS %}
+          <li>{{ number }}</li>
+          {% else %}
+          <li><a href="?page={{ number }}"{% if number == page_obj.number %} class="active" aria-current="page"{% endif %}>{{ number }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li><a href="?page={{ page_obj.next_page_number }}" aria-label="Next page"><i class="bi bi-chevron-right"></i></a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+
+</section><!-- /Blog Pagination Section -->
+{% endif %}
+{% endblock %}

@@ -1,0 +1,8 @@
+<ul class="list-unstyled footer-blog-entry">
+  {% for post in posts %}
+  <li>
+    <span class="d-block date">{{ post.published|date:"F j, Y" }}</span>
+    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+  </li>
+  {% endfor %}
+</ul>

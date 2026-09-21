@@ -1,0 +1,13 @@
+<!-- Page Title -->
+<div class="page-title light-background">
+  <div class="container">
+    <h1>{{ title }}</h1>
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a href="{% url 'core:home' %}">Home</a></li>
+        {% if parent_title %}<li><a href="{{ parent_url }}">{{ parent_title }}</a></li>{% endif %}
+        <li class="current">{{ title }}</li>
+      </ol>
+    </nav>
+  </div>
+</div><!-- End Page Title -->

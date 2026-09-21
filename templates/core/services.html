@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Services{% endblock %}
+{% block meta_description %}Explore Active's services, from technology and web design to branding.{% endblock %}
+{% block body_class %}services-page{% endblock %}
+
+{% block content %}
+{% include "partials/page_title.html" with title="Services" %}
+
+{% include "partials/sections/services_2.html" %}
+
+{% include "partials/sections/services.html" %}
+{% endblock %}

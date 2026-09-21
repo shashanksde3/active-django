@@ -1,0 +1,17 @@
+<form action="{% url 'contact:newsletter' %}" method="post" class="site-form">
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ next }}">
+  <div class="mb-2">
+    <label for="{{ form.email.id_for_label }}" class="visually-hidden">{{ form.email.label }}</label>
+    {{ form.email }}
+
+    <button type="submit" class="btn btn-link" aria-label="Subscribe">
+      <span class="bi bi-arrow-right"></span>
+    </button>
+  </div>
+  {% for message in messages %}
+    {% if message.extra_tags == "newsletter" %}
+      <div class="{% if message.level_tag == 'success' %}sent-message{% else %}error-message{% endif %} d-block" role="status">{{ message }}</div>
+    {% endif %}
+  {% endfor %}
+</form>

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Contact{% endblock %}
+{% block meta_description %}Get in touch with Active. Send us a message and we'll get back to you.{% endblock %}
+{% block body_class %}contact-page{% endblock %}
+
+{% block content %}
+{% include "partials/page_title.html" with title="Contact" %}
+
+<!-- Contact Section -->
+<section id="contact" class="contact section">
+
+  <div class="container" data-aos="fade">
+
+    <div class="row gy-5 gx-lg-5">
+
+      <div class="col-lg-4">
+
+        <div class="info">
+          <h3>Get in touch</h3>
+          <p>Et id eius voluptates atque nihil voluptatem enim in tempore minima sit ad mollitia commodi minus.</p>
+
+          <div class="info-item d-flex">
+            <i class="bi bi-geo-alt flex-shrink-0"></i>
+            <div>
+              <h4>Location:</h4>
+              <p>A108 Adam Street, New York, NY 535022</p>
+            </div>
+          </div><!-- End Info Item -->
+
+          <div class="info-item d-flex">
+            <i class="bi bi-envelope flex-shrink-0"></i>
+            <div>
+              <h4>Email:</h4>
+              <p>info@example.com</p>
+            </div>
+          </div><!-- End Info Item -->
+
+          <div class="info-item d-flex">
+            <i class="bi bi-phone flex-shrink-0"></i>
+            <div>
+              <h4>Call:</h4>
+              <p>+1 5589 55488 55</p>
+            </div>
+          </div><!-- End Info Item -->
+
+        </div>
+
+      </div>
+
+      <div class="col-lg-8">
+        <form action="{% url 'contact:contact' %}#contact" method="post" class="site-form">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label for="{{ form.name.id_for_label }}" class="visually-hidden">{{ form.name.label }}</label>
+              {{ form.name }}
+              {% for error in form.name.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+            </div>
+            <div class="col-md-6 form-group mt-3 mt-md-0">
+              <label for="{{ form.email.id_for_label }}" class="visually-hidden">{{ form.email.label }}</label>
+              {{ form.email }}
+              {% for error in form.email.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+            </div>
+          </div>
+          <div class="form-group mt-3">
+            <label for="{{ form.subject.id_for_label }}" class="visually-hidden">{{ form.subject.label }}</label>
+            {{ form.subject }}
+            {% for error in form.subject.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+          </div>
+          <div class="form-group mt-3">
+            <label for="{{ form.message.id_for_label }}" class="visually-hidden">{{ form.message.label }}</label>
+            {{ form.message }}
+            {% for error in form.message.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+          </div>
+          <div class="my-3">
+            {% for message in messages %}
+              {% if message.extra_tags == "contact" %}
+                <div class="sent-message d-block" role="status">{{ message }}</div>
+              {% endif %}
+            {% endfor %}
+            {% if form.errors %}
+              <div class="error-message d-block" role="alert">Please correct the errors above and try again.</div>
+            {% endif %}
+          </div>
+          <div class="text-center"><button type="submit">Send Message</button></div>
+        </form>
+      </div><!-- End Contact Form -->
+
+    </div>
+
+  </div>
+
+</section><!-- /Contact Section -->
+{% endblock %}
