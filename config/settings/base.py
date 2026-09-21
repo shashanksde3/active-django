@@ -64,7 +64,8 @@ STORAGES = {
 
 EMAIL_BACKEND = env("EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="Active Website <noreply@example.com>")
-CONTACT_EMAIL = env("CONTACT_EMAIL", default="contact@example.com")
+# A blank value would leave form emails with no recipient, so it falls back like an unset one.
+CONTACT_EMAIL = env("CONTACT_EMAIL", default="") or "contact@example.com"
 
 LOGGING = {
     "version": 1,

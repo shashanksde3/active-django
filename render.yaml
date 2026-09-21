@@ -12,5 +12,3 @@ services:
         value: config.settings.prod
       - key: DJANGO_SECRET_KEY
         generateValue: true
-      - key: CONTACT_EMAIL
-        sync: false
