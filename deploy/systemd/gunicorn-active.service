@@ -1,0 +1,24 @@
+[Unit]
+Description=gunicorn for the Active site
+Requires=gunicorn-active.socket
+After=network.target
+
+[Service]
+Type=notify
+NotifyAccess=main
+User=active
+Group=active
+WorkingDirectory=/srv/active/app
+Environment=GUNICORN_WORKERS=3
+EnvironmentFile=/etc/active/active.env
+ExecStart=/srv/active/app/.venv/bin/gunicorn --workers ${GUNICORN_WORKERS} --access-logfile - config.wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=10
+Restart=on-failure
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target

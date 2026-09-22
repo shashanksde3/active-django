@@ -1,0 +1,11 @@
+[Unit]
+Description=gunicorn socket for the Active site
+
+[Socket]
+ListenStream=/run/gunicorn-active.sock
+# Only nginx talks to the socket; gunicorn inherits the open file descriptor.
+SocketUser=www-data
+SocketMode=0600
+
+[Install]
+WantedBy=sockets.target
