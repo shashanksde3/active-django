@@ -73,9 +73,10 @@ public_ip() {
 install_packages() {
   log "Installing system packages"
   export DEBIAN_FRONTEND=noninteractive
-  apt-get update -q
-  apt-get upgrade -yq
-  apt-get install -yq python3-venv git nginx ufw fail2ban unattended-upgrades \
+  local apt=(apt-get -o DPkg::Lock::Timeout=300)
+  "${apt[@]}" update -q
+  "${apt[@]}" upgrade -yq
+  "${apt[@]}" install -yq python3-venv git nginx ufw fail2ban unattended-upgrades \
     certbot python3-certbot-nginx
 }
 
@@ -99,7 +100,6 @@ secure_server() {
   systemctl enable --now fail2ban >/dev/null
 
   if [[ -s /root/.ssh/authorized_keys ]]; then
-    # sshd keeps the first value it reads, so this must sort before cloud-init's 50-cloud-init.conf.
     cat >/etc/ssh/sshd_config.d/00-active-hardening.conf <<'EOF'
 PasswordAuthentication no
 KbdInteractiveAuthentication no
@@ -115,10 +115,9 @@ EOF
 create_app_user() {
   log "Creating the '$APP_USER' user and $APP_HOME"
   id "$APP_USER" &>/dev/null || adduser --system --group --home "$APP_HOME" --shell /bin/bash "$APP_USER"
-  install -d -m 750 -o "$APP_USER" -g "$APP_USER" "$APP_HOME"
+  install -d -m 711 -o "$APP_USER" -g "$APP_USER" "$APP_HOME"
   install -d -m 700 -o "$APP_USER" -g "$APP_USER" "$APP_HOME/.ssh"
-  # nginx serves staticfiles straight from the app directory, so it needs to traverse the home dir.
-  usermod -aG "$APP_USER" www-data
+  if id -nG www-data | grep -qw "$APP_USER"; then gpasswd -d www-data "$APP_USER" >/dev/null; fi
 }
 
 setup_repo_access() {
@@ -191,7 +190,6 @@ install_services() {
   ln -sf /etc/nginx/sites-available/active /etc/nginx/sites-enabled/active
   rm -f /etc/nginx/sites-enabled/default
   nginx -t
-  # A restart (not reload) so nginx workers pick up www-data's new group membership.
   systemctl restart nginx
 }
 
